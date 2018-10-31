@@ -1,0 +1,200 @@
+
+
+
+ARM Macro Assembler    Page 1 
+
+
+    1 00000000                 AREA             |.text|, CODE, READONLY, ALIGN=
+2
+    2 00000000         THUMB
+    3 00000000                 EXPORT           Start       ; Si se desea traba
+                                                            jar con varios arch
+                                                            ivos .s se deben ex
+                                                            portar e importar.
+    4 00000000         
+    5 00000000         Start
+    6 00000000 EEF7 0A00       VMOV.F32         S1, #1      ;  parte para -1 de
+                                                            l numerador
+    7 00000004 EEBF 1A00       VMOV.F32         S2, #-1     ;  2 Parte para -1 
+                                                            del numerador
+    8 00000008 EEF7 1A00       VMOV.F32         S3, #1      ;  Constante 1
+    9 0000000C EEB0 2A00       VMOV.F32         S4, #2      ;  Constante 2
+   10 00000010 EEF7 2A00       VMOV.F32         S5, #1      ;  donde se almacen
+                                                            ará el x al cuadrad
+                                                            o
+   11 00000014 EEF7 DA00       VMOV.F32         S27, #1     ;  Inicio del facto
+                                                            rial 
+   12 00000018 EEF1 5A04       VMOV.F32         S11, #5     ;  Parametro x
+   13 0000001C EEB7 DA00       VMOV.F32         S26, #1     ;
+   14 00000020 EEF0 EA00       VMOV.F32         S29, #2     ;
+   15 00000024 EEF7 FA00       VMOV.F32         S31, #1     ;
+   16 00000028         
+   17 00000028 F04F 0101       MOV              R1, #1      ;   CONTADOR
+   18 0000002C E7FF            B                Contador    ;   Dirige a la Sub
+                                                            rutina  
+   19 0000002E         
+   20 0000002E         Contador
+   21 0000002E 2919            CMP              R1, #25     ;   Compara si R1 e
+                                                            s igual a 25
+   22 00000030 D01F            BEQ              Resultado   ;   Si la comparaci
+                                                            ón anterior es igua
+                                                            l a 25, se dirige a
+                                                             la subrutina resul
+                                                            tado.
+   23 00000032 F000 F800       BL               MenosUno    ;   Si la comparaci
+                                                            ón NO es igual a 25
+                                                             
+   24 00000036         
+   25 00000036         MenosUno
+   26 00000036 EE60 0A81       VMUL.F32         S1, S1, S2  ; Multiplica 1 (S1)
+                                                             por S2, es el meno
+                                                            s uno del numerador
+                                                            
+   27 0000003A E7FF            B                Suma        ;    Dirige a subru
+                                                            tina Suma
+   28 0000003C         
+   29 0000003C         Suma
+   30 0000003C EE62 2AA5       VMUL.F32         S5, S5, S11 ;
+   31 00000040 EE62 2AA5       VMUL.F32         S5, S5, S11 ;
+   32 00000044 EE22 3AA5       VMUL.F32         S6, S5, S11 ;
+   33 00000048 EE23 3A20       VMUL.F32         S6, S6, S1  ;
+   34 0000004C E7FF            B                fac         ;     Dirige a la s
+                                                            ubrutina fac. 
+   35 0000004E         
+   36 0000004E         fac
+   37 0000004E EE2D DA2E       VMUL.F32         S26, S26, S29 ; 
+
+
+
+ARM Macro Assembler    Page 2 
+
+
+   38 00000052 EE7E EAAF       VADD.F32         S29, S31    ;  SUMA 1
+   39 00000056 EE2D DA2E       VMUL.F32         S26, S26, S29 ;
+   40 0000005A EE7E EAAF       VADD.F32         S29, S31    ; SUMA 1
+   41 0000005E F000 F800       BL               Division
+   42 00000062         
+   43 00000062         Division
+   44 00000062 EE83 6A0D       VDIV.F32         S12, S6, S26 ; realiza la divis
+                                                            ion de s6 con s26 y
+                                                             lo asigna en s12
+   45 00000066 F101 0101       ADD              R1, R1, #1  ;  A R1 se le irá s
+                                                            umando en cada iter
+                                                            ación un 1 hasta ll
+                                                            egar a 25
+   46 0000006A EE76 6A86       VADD.F32         S13, S13, S12
+   47 0000006E F7FF FFDE       BL               Contador    ;  
+   48 00000072         
+   49 00000072         Resultado
+   50 00000072 EE76 6AA5       VADD.F32         S13, S13, S11 ; suma termino cu
+                                                            ando contador es ce
+                                                            ro
+   51 00000076 E7FF            B                Stop        ;    Final de la se
+                                                            rie.
+   52 00000078         
+   53 00000078         Stop
+   54 00000078 BF00            NOP
+   55 0000007A         
+   56 0000007A 00 00           ALIGN
+   57 0000007C                 END                          ; Finalización del 
+                                                            programa
+Command Line: --debug --xref --diag_suppress=9931 --cpu=Cortex-M4.fp --apcs=int
+erwork --depend=.\objects\seno.d -o.\objects\seno.o -I.\RTE\_Target_1 -IC:\Keil
+_v5\ARM\PACK\Keil\TM4C_DFP\1.1.0\Device\Include\TM4C123 -IC:\Keil_v5\ARM\CMSIS\
+Include --predefine="__EVAL SETA 1" --predefine="__UVISION_VERSION SETA 525" --
+predefine="TM4C123GH6PM SETA 1" --list=.\listings\seno.lst seno.s
+
+
+
+ARM Macro Assembler    Page 1 Alphabetic symbol ordering
+Relocatable symbols
+
+.text 00000000
+
+Symbol: .text
+   Definitions
+      At line 1 in file seno.s
+   Uses
+      None
+Comment: .text unused
+Contador 0000002E
+
+Symbol: Contador
+   Definitions
+      At line 20 in file seno.s
+   Uses
+      At line 18 in file seno.s
+      At line 47 in file seno.s
+
+Division 00000062
+
+Symbol: Division
+   Definitions
+      At line 43 in file seno.s
+   Uses
+      At line 41 in file seno.s
+Comment: Division used once
+MenosUno 00000036
+
+Symbol: MenosUno
+   Definitions
+      At line 25 in file seno.s
+   Uses
+      At line 23 in file seno.s
+Comment: MenosUno used once
+Resultado 00000072
+
+Symbol: Resultado
+   Definitions
+      At line 49 in file seno.s
+   Uses
+      At line 22 in file seno.s
+Comment: Resultado used once
+Start 00000000
+
+Symbol: Start
+   Definitions
+      At line 5 in file seno.s
+   Uses
+      At line 3 in file seno.s
+Comment: Start used once
+Stop 00000078
+
+Symbol: Stop
+   Definitions
+      At line 53 in file seno.s
+   Uses
+      At line 51 in file seno.s
+Comment: Stop used once
+Suma 0000003C
+
+
+
+
+ARM Macro Assembler    Page 2 Alphabetic symbol ordering
+Relocatable symbols
+
+Symbol: Suma
+   Definitions
+      At line 29 in file seno.s
+   Uses
+      At line 27 in file seno.s
+Comment: Suma used once
+THUMB 00000000
+
+Symbol: THUMB
+   Definitions
+      At line 2 in file seno.s
+   Uses
+      None
+Comment: THUMB unused
+fac 0000004E
+
+Symbol: fac
+   Definitions
+      At line 36 in file seno.s
+   Uses
+      At line 34 in file seno.s
+Comment: fac used once
+10 symbols
+344 symbols in table
