@@ -1,0 +1,98 @@
+
+
+
+ARM Macro Assembler    Page 1 
+
+
+    1 00000000                 AREA             |.text|, CODE, READONLY, ALIGN=
+2
+    2 00000000         THUMB
+    3 00000000                 EXPORT           Start       ; Si se desea traba
+                                                            jar con varios arch
+                                                            ivos .s se deben ex
+                                                            portar e importar.
+    4 00000000         
+    5 00000000         Start
+    6 00000000 EDDF 0A08       VLDR.F32         S1, =90.5   ; peso en kg
+    7 00000004 ED9F 1A08       VLDR.F32         S2, =1.92   ; estatura en m
+    8 00000008 EEF7 1A00       VMOV.F32         S3, #1      ; denominador
+    9 0000000C EEB7 2A00       VMOV.F32         S4, #1      ; resultado
+   10 00000010         
+   11 00000010 E7FF            B                Operacion
+   12 00000012         
+   13 00000012         Operacion
+   14 00000012 EE61 1A01       VMUL.F32         S3, S2, S2  ; S3=s2*s2
+   15 00000016 F000 F800       BL               Resultado
+   16 0000001A         
+   17 0000001A         Resultado
+   18 0000001A EE80 2AA1       VDIV.F32         S4, S1, S3  ; s4 = S1/S3
+   19 0000001E E7FF            B                Stop
+   20 00000020         
+   21 00000020         Stop
+   22 00000020 BF00            NOP
+   23 00000022         
+   24 00000022 00 00           ALIGN
+   25 00000024                 END
+              42B50000 
+              3FF5C28F 
+Command Line: --debug --xref --diag_suppress=9931 --cpu=Cortex-M4.fp --apcs=int
+erwork --depend=.\objects\imc.d -o.\objects\imc.o -I.\RTE\_Target_1 -IC:\Keil_v
+5\ARM\PACK\Keil\TM4C_DFP\1.1.0\Device\Include\TM4C123 -IC:\Keil_v5\ARM\CMSIS\In
+clude --predefine="__EVAL SETA 1" --predefine="__UVISION_VERSION SETA 525" --pr
+edefine="TM4C123GH6PM SETA 1" --list=.\listings\imc.lst imc.s
+
+
+
+ARM Macro Assembler    Page 1 Alphabetic symbol ordering
+Relocatable symbols
+
+.text 00000000
+
+Symbol: .text
+   Definitions
+      At line 1 in file imc.s
+   Uses
+      None
+Comment: .text unused
+Operacion 00000012
+
+Symbol: Operacion
+   Definitions
+      At line 13 in file imc.s
+   Uses
+      At line 11 in file imc.s
+Comment: Operacion used once
+Resultado 0000001A
+
+Symbol: Resultado
+   Definitions
+      At line 17 in file imc.s
+   Uses
+      At line 15 in file imc.s
+Comment: Resultado used once
+Start 00000000
+
+Symbol: Start
+   Definitions
+      At line 5 in file imc.s
+   Uses
+      At line 3 in file imc.s
+Comment: Start used once
+Stop 00000020
+
+Symbol: Stop
+   Definitions
+      At line 21 in file imc.s
+   Uses
+      At line 19 in file imc.s
+Comment: Stop used once
+THUMB 00000000
+
+Symbol: THUMB
+   Definitions
+      At line 2 in file imc.s
+   Uses
+      None
+Comment: THUMB unused
+6 symbols
+342 symbols in table
