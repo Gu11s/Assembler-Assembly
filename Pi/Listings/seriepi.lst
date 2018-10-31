@@ -1,0 +1,173 @@
+
+
+
+ARM Macro Assembler    Page 1 
+
+
+    1 00000000                 AREA             |.text|, CODE, READONLY, ALIGN=
+2
+    2 00000000         THUMB
+    3 00000000                 EXPORT           Start       ; Si se desea traba
+                                                            jar con varios arch
+                                                            ivos .s se deben ex
+                                                            portar e importar.
+    4 00000000         
+    5 00000000         
+    6 00000000         Start
+    7 00000000 EEFF 0A00       VMOV.F32         S1, #-1     ; -1 del numerador
+    8 00000004 EEB7 1A00       VMOV.F32         S2, #1      ;   1 del denominad
+                                                            or
+    9 00000008 EEF0 1A00       VMOV.F32         S3, #2      ;   2 del denominad
+                                                            or
+   10 0000000C EEB7 2A00       VMOV.F32         S4, #1      ;   1 del exponente
+                                                            
+   11 00000010 EEF1 2A00       VMOV.F32         S5, #4      ;   4 que multiplic
+                                                            a
+   12 00000014 EEB7 3A00       VMOV.F32         S6, #1      ;   k del denominad
+                                                            or y exponente
+   13 00000018 EEF7 3A00       VMOV.F32         S7, #1      ;   exponente
+   14 0000001C EEB7 4A00       VMOV.F32         S8, #1      ;   NUMERADOR
+   15 00000020 EEF7 4A00       VMOV.F32         S9, #1      ;   DENOMINADOR
+   16 00000024 EEB7 5A00       VMOV.F32         S10, #1     ;  DIVISION
+   17 00000028 EEF7 5A00       VMOV.F32         S11, #1     ;  MULTIPLICACION
+   18 0000002C EEFF 6A00       VMOV.F32         S13, #-1
+   19 00000030 F04F 0101       MOV              R1, #1      ;        CONTADOR
+   20 00000034         
+   21 00000034 E7FF            B                Numerador
+   22 00000036         
+   23 00000036         Numerador
+   24 00000036         ;VADD.F32 S7, S6, S4; S7=K+1
+   25 00000036 EE60 0AA6       VMUL.F32         S1, S13
+   26 0000003A EEB0 4A60       VMOV.F32         S8, S1      ; S8 = S1
+   27 0000003E E7FF            B                Denominador
+   28 00000040         
+   29 00000040         Denominador
+   30 00000040 EE61 4A83       VMUL.F32         S9, S3, S6  ; S9 = 2K
+   31 00000044 EE74 4AC1       VSUB.F32         S9, S2      ; S9=S9-1
+   32 00000048         
+   33 00000048 E7FF            B                Resultado
+   34 0000004A         
+   35 0000004A         Resultado
+   36 0000004A EE84 5A24       VDIV.F32         S10, S8, S9 ; S10 = S8/S9
+   37 0000004E EE62 5A85       VMUL.F32         S11, S5, S10 ; S11 = S5*S10
+   38 00000052 EE36 6A25       VADD.F32         S12, S12, S11
+   39 00000056 EE33 3A02       VADD.F32         S6, S4      ; k++
+   40 0000005A F000 F800       BL               Comparacion
+   41 0000005E         
+   42 0000005E         Comparacion
+   43 0000005E 2932            CMP              R1, #50     ; tope final del la
+                                                             serie
+   44 00000060 F101 0101       ADD              R1, R1, #1
+   45 00000064 D001            BEQ              L           ;si lo anterior es 
+                                                            cierto manda al sig
+                                                            uiente
+   46 00000066 F7FF FFE6       BL               Numerador
+   47 0000006A         
+
+
+
+ARM Macro Assembler    Page 2 
+
+
+   48 0000006A         L
+   49 0000006A E7FF            B                Stop
+   50 0000006C         
+   51 0000006C         
+   52 0000006C         Stop
+   53 0000006C BF00            NOP
+   54 0000006E BF00            NOP
+   55 00000070         
+   56 00000070                 ALIGN
+   57 00000070                 END
+Command Line: --debug --xref --diag_suppress=9931 --cpu=Cortex-M4.fp --apcs=int
+erwork --depend=.\objects\seriepi.d -o.\objects\seriepi.o -I.\RTE\_Target_1 -IC
+:\Keil_v5\ARM\PACK\Keil\TM4C_DFP\1.1.0\Device\Include\TM4C123 -IC:\Keil_v5\ARM\
+CMSIS\Include --predefine="__EVAL SETA 1" --predefine="__UVISION_VERSION SETA 5
+25" --predefine="TM4C123GH6PM SETA 1" --list=.\listings\seriepi.lst seriepi.s
+
+
+
+ARM Macro Assembler    Page 1 Alphabetic symbol ordering
+Relocatable symbols
+
+.text 00000000
+
+Symbol: .text
+   Definitions
+      At line 1 in file seriepi.s
+   Uses
+      None
+Comment: .text unused
+Comparacion 0000005E
+
+Symbol: Comparacion
+   Definitions
+      At line 42 in file seriepi.s
+   Uses
+      At line 40 in file seriepi.s
+Comment: Comparacion used once
+Denominador 00000040
+
+Symbol: Denominador
+   Definitions
+      At line 29 in file seriepi.s
+   Uses
+      At line 27 in file seriepi.s
+Comment: Denominador used once
+L 0000006A
+
+Symbol: L
+   Definitions
+      At line 48 in file seriepi.s
+   Uses
+      At line 45 in file seriepi.s
+Comment: L used once
+Numerador 00000036
+
+Symbol: Numerador
+   Definitions
+      At line 23 in file seriepi.s
+   Uses
+      At line 21 in file seriepi.s
+      At line 46 in file seriepi.s
+
+Resultado 0000004A
+
+Symbol: Resultado
+   Definitions
+      At line 35 in file seriepi.s
+   Uses
+      At line 33 in file seriepi.s
+Comment: Resultado used once
+Start 00000000
+
+Symbol: Start
+   Definitions
+      At line 6 in file seriepi.s
+   Uses
+      At line 3 in file seriepi.s
+Comment: Start used once
+Stop 0000006C
+
+
+
+
+ARM Macro Assembler    Page 2 Alphabetic symbol ordering
+Relocatable symbols
+
+Symbol: Stop
+   Definitions
+      At line 52 in file seriepi.s
+   Uses
+      At line 49 in file seriepi.s
+Comment: Stop used once
+THUMB 00000000
+
+Symbol: THUMB
+   Definitions
+      At line 2 in file seriepi.s
+   Uses
+      None
+Comment: THUMB unused
+9 symbols
+343 symbols in table
